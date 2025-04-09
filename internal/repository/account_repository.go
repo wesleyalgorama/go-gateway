@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/wesleyalgorama/fcw/go-gateway/internal/domain"
 )
@@ -41,4 +42,35 @@ func (r *AccountRepository) Save(account *domain.Account) error {
 	}
 
 	return nil
+}
+
+func (r *AccountRepository) FindByApiKey(apiKey string) (*domain.Account, error) {
+	var account domain.Account
+	var createdAt, updatedAt time.Time
+
+	err := r.db.QueryRow(`
+		SELECT id, name, email, api_key, balance, created_at, updated_at
+		FROM accounts
+		WHERE api_key = $1
+	`, apiKey).Scan(
+		&account.Id,
+		&account.Name,
+		&account.Email,
+		&account.ApiKey,
+		&account.Balance,
+		&createdAt,
+		&updatedAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, domain.ErrAccountNotFound
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	account.CreatedAt = createdAt
+	account.UpdatedAt = updatedAt
+	return &account, nil
 }
