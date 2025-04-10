@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"github.com/wesleyalgorama/fcw/go-gateway/internal/repository"
 	"github.com/wesleyalgorama/fcw/go-gateway/internal/service"
 	"github.com/wesleyalgorama/fcw/go-gateway/internal/web/server"
@@ -27,7 +28,7 @@ func main() {
 
 	connStr := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		getEnv("DB_HOST", "db"),
+		getEnv("DB_HOST", "postgres"),
 		getEnv("DB_PORT", "5432"),
 		getEnv("DB_USER", "user"),
 		getEnv("DB_PASSWORD", "pass"),

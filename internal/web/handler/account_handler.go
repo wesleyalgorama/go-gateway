@@ -39,7 +39,7 @@ func (h *AccountHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
-	apiKey := r.Header.Get("X-API-KEY")
+	apiKey := r.Header.Get("api_key")
 
 	if apiKey == "" {
 		http.Error(w, "API key is required", http.StatusUnauthorized)
